@@ -75,9 +75,16 @@ public:
 		return insert(&p_root,key,dato);
 	}
 
-	bool insert(node ** n, const K & key, const D & dato){
+	void turn(node <K,D>* n, int d){
+		node<K,D> * aux = (*n)->p_child[d];
+		(*n)->p_child[d]= aux -> p_child[!d];
+		aux -> p_child[!d]= *n;
+		*n = aux;
+	}
+
+	bool insert(node <K,D>* n, const K & key, const D & dato){
 		if(!*n){
-			*n=new node(key,dato);
+			*n=new node<K,D>(key,dato);
 			return true;
 		}
 		if((*n)->key == key) return false;
@@ -85,9 +92,17 @@ public:
 		if(!insert(&(*n)->p_child[d],key,dato)) return false;
 		(*n)->h = max((*n)->p_child[0]->h,(*n)->p_child[1]->h) + 1; //altura del nodo
 		int f = (*n)->p_child[0]->h - (*n)->p_child[1]->h;
+		/*int fl = (*n)->p_child[0]->p_child[0]->h - (*n)->p_child[0]->p_child[1]->h;
+		int fr = (*n)->p_child[1]->p_child[0]->h - (*n)->p_child[1]->p_child[1]->h;
 		if(f==-2 || f ==2){
-			//completar
-		}
+			if((f==2 && fl==1) || (f==-2 && fr == -1)){
+				turn(*n,f/2);
+			}
+			else{
+				turn(*n,-f/2);
+				turn(*n,f/2);
+			}
+		}*/
 		return true;
 	}
 };
