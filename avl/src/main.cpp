@@ -65,6 +65,18 @@ public:
 		print(p_root);
 	}
 	
+	void turn(node <K,D>* n, int d){
+		node<K,D> * aux = (*n)->p_child[d];
+		(*n)->p_child[d]= aux -> p_child[!d];
+		aux -> p_child[!d]= *n;
+		*n = aux;
+	}
+
+/*	int balance(node <K,D>* n){
+		int f = (*n)->p_child[0]->h - (*n)->p_child[1]->h; //factor de balance
+		return f;
+	}*/
+
 	bool insert(const K & key, const D & dato)
 	{
 	/*	node<K, D> ** n;
@@ -74,15 +86,7 @@ public:
 		return true;*/
 		return insert(&p_root,key,dato);
 	}
-
-	void turn(node <K,D>* n, int d){
-		node<K,D> * aux = (*n)->p_child[d];
-		(*n)->p_child[d]= aux -> p_child[!d];
-		aux -> p_child[!d]= *n;
-		*n = aux;
-	}
-
-	bool insert(node <K,D>* n, const K & key, const D & dato){
+	bool insert(node <K,D>** n, const K & key, const D & dato){ //PREGUNTAR DIFERENCIA ENTRE node <K,D>** n Y node <K,D>* n
 		if(!*n){
 			*n=new node<K,D>(key,dato);
 			return true;
@@ -91,17 +95,13 @@ public:
 		int d = key > (*n)->key; //Si es mayor a la derecha
 		if(!insert(&(*n)->p_child[d],key,dato)) return false;
 		(*n)->h = max((*n)->p_child[0]->h,(*n)->p_child[1]->h) + 1; //altura del nodo
-		int f = (*n)->p_child[0]->h - (*n)->p_child[1]->h;
-		/*int fl = (*n)->p_child[0]->p_child[0]->h - (*n)->p_child[0]->p_child[1]->h;
-		int fr = (*n)->p_child[1]->p_child[0]->h - (*n)->p_child[1]->p_child[1]->h;
-		if(f==-2 || f ==2){
-			if((f==2 && fl==1) || (f==-2 && fr == -1)){
-				turn(*n,f/2);
-			}
-			else{
-				turn(*n,-f/2);
-				turn(*n,f/2);
-			}
+/*
+		if((balance(*n) ==2 && balance((*n)->p_child[0]==1)) || (balance(*n) ==-2 && balance((*n)->p_child[1]==-1)) ){
+			turn(*n,d);
+		}
+		else if ((balance(*n) ==2 && balance((*n)->p_child[0]==-1)) || (balance(*n) ==-2 && balance((*n)->p_child[1]==1))){
+			turn((*n)->p_child[!d],d);
+			turn(*n,!d);
 		}*/
 		return true;
 	}
@@ -109,4 +109,9 @@ public:
 
 int main() {
     std::cout << "Hello Easy C++ project!" << std::endl;
+	avl<int,int> tree;
+	tree.insert(3,50);
+	tree.insert(7,50);
+	tree.insert(1,50);
+
 }
