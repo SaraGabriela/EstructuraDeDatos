@@ -19,6 +19,7 @@ private:
 public:
 	node(const K & _key, const D & _dato) : key(_key), dato(_dato)
 	{
+		h = 1;
 		p_child[0] = p_child[1] = NULL;
 	}
 
@@ -65,17 +66,17 @@ public:
 		print(p_root);
 	}
 	
-	void turn(node <K,D>* n, int d){
+	/*void turn(node <K,D>** n, int d){
 		node<K,D> * aux = (*n)->p_child[d];
 		(*n)->p_child[d]= aux -> p_child[!d];
 		aux -> p_child[!d]= *n;
 		*n = aux;
-	}
-
-/*	int balance(node <K,D>* n){
-		int f = (*n)->p_child[0]->h - (*n)->p_child[1]->h; //factor de balance
-		return f;
 	}*/
+
+	int balance(node <K,D>* n){
+		int f = n->p_child[0]->h - n->p_child[1]->h; //factor de balance
+		return f;
+	}
 
 	bool insert(const K & key, const D & dato)
 	{
@@ -95,23 +96,69 @@ public:
 		int d = key > (*n)->key; //Si es mayor a la derecha
 		if(!insert(&(*n)->p_child[d],key,dato)) return false;
 		(*n)->h = max((*n)->p_child[0]->h,(*n)->p_child[1]->h) + 1; //altura del nodo
-/*
-		if((balance(*n) ==2 && balance((*n)->p_child[0]==1)) || (balance(*n) ==-2 && balance((*n)->p_child[1]==-1)) ){
-			turn(*n,d);
+
+		if((balance(*n) ==2 && balance((*n)->p_child[0])==1) || (balance(*n) ==-2 && balance((*n)->p_child[1])==-1) ){
+			//turn(*n,d);
 		}
-		else if ((balance(*n) ==2 && balance((*n)->p_child[0]==-1)) || (balance(*n) ==-2 && balance((*n)->p_child[1]==1))){
-			turn((*n)->p_child[!d],d);
-			turn(*n,!d);
-		}*/
+		else if ((balance(*n) ==2 && balance((*n)->p_child[0])==-1) || (balance(*n) ==-2 && balance((*n)->p_child[1])==1)){
+			//turn((*n)->p_child[!d],d);
+			//turn(*n,!d);
+		}
 		return true;
+	}
+	void printGraph(int num){
+		string num_arch = to_string(num);
+		string ext1 = ".dot";
+		string num_xt1=""+ num_arch +""+ ext1 +"";
+		ofstream es(num_xt1);
+
+		string s = to_string(num);
+		string pt1="dot -Tpdf ";
+		string pt2=" -o ";
+		string pt3=".pdf";
+		string rt=""+ pt1 +""+ num_xt1 +""+ pt2 +""+ s +""+ pt3 +"";
+		const char *buffer = rt.c_str();
+	
+		es<<"graph {"<<endl;
+		es<<p_root->key<<endl;
+		printGraph(es,p_root);
+		es<<"}"<<endl;
+		es.close();
+		system(buffer);
+	}
+
+	void printGraph(ofstream & es, node<K,D> *n){
+		if(n!=NULL)
+    	{    
+        if(n->p_child[0]!=NULL){
+            es<<n->key;
+            es<<"--";
+            es<<n->p_child[0]->key<<endl;
+            printGraph(es,n->p_child[0]);
+        }
+        if(n->p_child[1]!=NULL){
+            es<<n->key;
+            es<<"--";
+            es<<n->p_child[1]->key<<endl;
+            printGraph(es,n->p_child[1]);
+        }
+		}
 	}
 };
 
+//SEPARAR CÓDIGO PARA QUE SEA MÁS LEGIBLE, MODIFICAR PUNTEROS DE TURN Y BALANCE SIENDO CONSCIENTE DE A QUÉ APUNTO
+//GRAFICAR ES ESCRIBIR HACIA UN FICHERO (CARGAR VALORES) Y EJECUTARLO DESDE FUNCION EN CODIGO
 int main() {
     std::cout << "Hello Easy C++ project!" << std::endl;
 	avl<int,int> tree;
 	tree.insert(3,50);
 	tree.insert(7,50);
 	tree.insert(1,50);
-
+	
+	//tree.printGraph(1);
+	for(int i=1;i<7;i++){
+        tree.insert(i,1);  
+        tree.printGraph(i);
+    }
+	return 0;
 }
