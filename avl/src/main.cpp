@@ -66,12 +66,12 @@ public:
 		print(p_root);
 	}
 	
-	/*void turn(node <K,D>** n, int d){
+	void turn(node <K,D>** n, int d){
 		node<K,D> * aux = (*n)->p_child[d];
 		(*n)->p_child[d]= aux -> p_child[!d];
 		aux -> p_child[!d]= *n;
 		*n = aux;
-	}*/
+	}
 
 	int balance(node <K,D>* n){
 		int f = n->p_child[0]->h - n->p_child[1]->h; //factor de balance
@@ -101,23 +101,25 @@ public:
 			//turn(*n,d);
 		}
 		else if ((balance(*n) ==2 && balance((*n)->p_child[0])==-1) || (balance(*n) ==-2 && balance((*n)->p_child[1])==1)){
-			//turn((*n)->p_child[!d],d);
-			//turn(*n,!d);
+			turn((*n)->p_child[!d],d);
+			turn(*n,!d);
 		}
 		return true;
 	}
-	void printGraph(int num){
-		string num_arch = to_string(num);
+	void printGraph(){
+		/*string num_arch = to_string(num);
 		string ext1 = ".dot";
 		string num_xt1=""+ num_arch +""+ ext1 +"";
-		ofstream es(num_xt1);
+		ofstream es(num_xt1);*/
 
-		string s = to_string(num);
+		ofstream es (archivo.dot);
+
+		/*string s = to_string(num);
 		string pt1="dot -Tpdf ";
 		string pt2=" -o ";
 		string pt3=".pdf";
 		string rt=""+ pt1 +""+ num_xt1 +""+ pt2 +""+ s +""+ pt3 +"";
-		const char *buffer = rt.c_str();
+		const char *buffer = rt.c_str();*/
 	
 		es<<"graph {"<<endl;
 		es<<p_root->key<<endl;
@@ -146,8 +148,6 @@ public:
 	}
 };
 
-//SEPARAR CÓDIGO PARA QUE SEA MÁS LEGIBLE, MODIFICAR PUNTEROS DE TURN Y BALANCE SIENDO CONSCIENTE DE A QUÉ APUNTO
-//GRAFICAR ES ESCRIBIR HACIA UN FICHERO (CARGAR VALORES) Y EJECUTARLO DESDE FUNCION EN CODIGO
 int main() {
     std::cout << "Hello Easy C++ project!" << std::endl;
 	avl<int,int> tree;
