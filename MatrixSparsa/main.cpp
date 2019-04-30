@@ -45,13 +45,11 @@ class sparse_matrix
 		
 		~sparse_matrix()
 		{
-			node **n;
-			
-			for (int j=0; j<n_rows; j++){ //OBTIENE HEAD DE CADA FILA
-					node **n;
-					n = &p_head[0][j];
+			node *n;			
+			for (int j=0; j<n_rows; j++){ //Costo de implementacion es O(m+n)
 					while(n){
-					p_head[0][j] = p_head[0][j]->p_next[1];
+					n = p_head[0][j];
+					p_head[0][j] = p_head[0][j]->p_next[0];
 					delete n;
 					}
 			}
@@ -70,8 +68,8 @@ class sparse_matrix
 				}
 			}*/
 			node ** n;
-			for (int i=0; i<n_rows;i++){
-				for (int j=0; j<n_cols; j++){
+			for (int i=0; i<n_cols;i++){
+				for (int j=0; j<n_rows; j++){
 					if(!find(n, j, i, 0)){
 						cout<<0<<" ";
 					}
@@ -94,7 +92,7 @@ class sparse_matrix
 		
 		void delNode(size_t i, size_t j)
 		{
-			node ** n;
+			/*node ** n;
 			if(find(n,i,j,0)){ //solo borra 00
 				node ** temp;
 				temp = n;
@@ -106,8 +104,19 @@ class sparse_matrix
 				node ** temp;
 				temp = n;
 				cout<<(*n)->value;
+			}*/
+			node ** nr;
+			if(find(nr, i, j, 0))
+			{
+				node ** nc;
+				find(nc, j, i, 1);
+				node * del = *nc;
+				*nr = del->p_next[0];
+				*nc = del->p_next[1];
+				delete del;
 			}
 		}
+		
 		T & operator () (size_t i, size_t j)
 		{
 			node ** nr;
@@ -159,7 +168,7 @@ int main()
 
 	sq.print();
 	cout<<endl;
-	sq.delNode(0,0);
+	sq.delNode(0,2);
 	sq.print();
 	//sparse_matrix<int> tr = tr.trans(sq);
 	//tr.print();
