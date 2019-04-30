@@ -46,11 +46,14 @@ class sparse_matrix
 		~sparse_matrix()
 		{
 			node **n;
-			for (int j=0; j<n_rows; j++){ //OBTIENE HEAD DE CADA COLUMNA
+			
+			for (int j=0; j<n_rows; j++){ //OBTIENE HEAD DE CADA FILA
 					node **n;
 					n = &p_head[0][j];
+					while(n){
 					p_head[0][j] = p_head[0][j]->p_next[1];
 					delete n;
+					}
 			}
 			delete[]p_head[0];
 			delete[]p_head[1];
