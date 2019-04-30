@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 #include <cstring>
 using namespace std;
 
@@ -48,6 +49,30 @@ class sparse_matrix
 			delete[]p_head[1];
 		}
 		
+		void trans(){
+			/*n_rows=m.n_rows;
+			n_cols=m.n_cols; 
+			
+			node ** n;
+			for (int i=0; i<n_cols;i++){
+				for (int j=0; j<n_rows; j++){
+					*n = new node(j, i, *nr, *nc); //TERMINAR
+				}
+			}*/
+			node ** n;
+			for (int i=0; i<n_rows;i++){
+				for (int j=0; j<n_cols; j++){
+					if(!find(n, j, i, 0)){
+						cout<<0<<" ";
+					}
+					else{
+						cout<<(*n)->value<<" ";
+					}
+				}
+				cout<<endl;
+			} 
+			
+		};
 		bool find(node **& n, size_t i, size_t j, bool c)
 		{
 			n = &p_head[c][i];
@@ -57,6 +82,22 @@ class sparse_matrix
 			return (*n) && (*n)->pos[!c] == j;
 		}
 		
+		void delNode(size_t i, size_t j)
+		{
+			node ** n;
+			if(find(n,i,j,0)){ //solo borra 00
+				node ** temp;
+				temp = n;
+				p_head[0][i]= (*n)->p_next[0];
+				p_head[1][j]= (*n)->p_next[1];
+				delete temp;
+			}
+			else if(find(n,j,i,1)){
+				node ** temp;
+				temp = n;
+				cout<<(*n)->value;
+			}
+		}
 		T & operator () (size_t i, size_t j)
 		{
 			node ** nr;
@@ -107,5 +148,10 @@ int main()
 	sq(2, 0) = 12312;
 
 	sq.print();
+	cout<<endl;
+	sq.delNode(2,0);
+	sq.print();
+	//sparse_matrix<int> tr = tr.trans(sq);
+	//tr.print();
 	return 0;
 }
