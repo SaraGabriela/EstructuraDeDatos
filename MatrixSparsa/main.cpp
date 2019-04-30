@@ -45,6 +45,13 @@ class sparse_matrix
 		
 		~sparse_matrix()
 		{
+			node **n;
+			for (int j=0; j<n_rows; j++){ //OBTIENE HEAD DE CADA COLUMNA
+					node **n;
+					n = &p_head[0][j];
+					p_head[0][j] = p_head[0][j]->p_next[1];
+					delete n;
+			}
 			delete[]p_head[0];
 			delete[]p_head[1];
 		}
@@ -149,7 +156,7 @@ int main()
 
 	sq.print();
 	cout<<endl;
-	sq.delNode(2,0);
+	sq.delNode(0,0);
 	sq.print();
 	//sparse_matrix<int> tr = tr.trans(sq);
 	//tr.print();
