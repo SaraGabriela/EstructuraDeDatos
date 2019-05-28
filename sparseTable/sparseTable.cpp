@@ -57,7 +57,12 @@ int sparseTable::rmq(int min, int max) {
 void sparseTable::printTable() {
 	for (int i = 0; i < len; i++) {
 		for (int j = 0; j < log(len) + 1; j++) {
-			cout << sTable[i][j] << " ";
+			if (sTable[i][j]>-10000) {
+				cout << sTable[i][j] << " ";
+			}
+			else {
+				cout << "- ";
+			}
 		}
 		cout << endl;
 	}

@@ -5,6 +5,6 @@ int main() {
 	sparseTable t(l, 10);
 	t.printTable();
 
-	cout << t.rmq(1, 3);
+	cout <<endl<< t.rmq(1, 3);
 	return 0;
 }
