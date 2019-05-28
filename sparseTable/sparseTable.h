@@ -17,5 +17,6 @@ public:
 	sparseTable(int arr[], int n);
 	~sparseTable();
 	void printTable();
+	int rmq(int min, int max);
 };
 

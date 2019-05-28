@@ -42,6 +42,18 @@ void sparseTable::preproc() {
 
 }
 
+int sparseTable::rmq(int min, int max) {
+	int l = max - min + 1;
+	int k = log(l);
+
+	if (v[sTable[min][k]] < v[sTable[min + l - (1<<k)][k]]) {
+		return v[sTable[min][k]];
+	}
+	else {
+		return v[sTable[min + l - (1 << k)][k]];
+	}
+}
+
 void sparseTable::printTable() {
 	for (int i = 0; i < len; i++) {
 		for (int j = 0; j < log(len) + 1; j++) {
